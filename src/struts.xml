@@ -10,8 +10,8 @@
 			</result-type>
 		</result-types>
 		
-		<action name="">
-			<result type="tiles">main</result>
+		<action name="" class="main.java.action.testAction">
+			<result type="tiles" name="SUCCESS">main</result>
 		</action>
 	</package>
 </struts>

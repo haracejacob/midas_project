@@ -9,7 +9,7 @@
 			<dataSource type="POOLED">
 				<property name="driver" value="com.mysql.jdbc.Driver" />	
 					
-				<property name="url" value="jdbc:mysql://127.0.0.1/moim" />
+				<property name="url" value="jdbc:mysql://127.0.0.1/test" />
 				<property name="username" value="root" />
 				<property name="password" value="apmsetup" />
 			</dataSource>

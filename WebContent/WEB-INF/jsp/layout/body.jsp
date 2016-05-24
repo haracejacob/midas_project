@@ -8,4 +8,23 @@
 
 <div>
 	body
+	<table>
+		<tr>
+			<th>seq</th>
+			<th>id</th>
+			<th>gems</th>
+			<th>coins</th>
+			<th>hearts</th>
+			<th>highscore</th>
+		</tr>
+		<s:iterator var="test" value="testList">
+			<tr>
+				<td>${test.seq}</td>
+				<td>${test.id}</td>					
+				<td>${test.gems}</td>
+				<td>${test.coins}</td>
+				<td>${test.highscore}</td>
+			</tr>
+		</s:iterator>		
+	</table>
 </div>
