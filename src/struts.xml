@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+		"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+		"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="midasWeb" namespace="/" extends="struts-default, tiles-default">
+		<result-types>
+			<result-type name="tiles" class="org.apache.struts2.views.tiles.TilesResult">
+			</result-type>
+		</result-types>
+		
+		<action name="">
+			<result type="tiles">main</result>
+		</action>
+	</package>
+</struts>
