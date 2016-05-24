@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE struts PUBLIC
 		"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
-		"http://struts.apache.org/dtds/struts-2.0.dtd">
+		"http://struts.apache.org/dtds/struts-2.5.dtd">
 
 <struts>
+	<constant name="struts.devMode" value="true" />
+    <constant name="struts.convention.action.suffix" value="Controller"/>
+    <constant name="struts.convention.action.mapAllMatches" value="true"/>
+    <constant name="struts.convention.default.parent.package" value="rest-default"/>
+    <constant name="struts.convention.package.locators" value="rest"/>
+    
 	<package name="midasWeb" namespace="/" extends="struts-default, tiles-default">
 		<result-types>
 			<result-type name="tiles" class="org.apache.struts2.views.tiles.TilesResult">
