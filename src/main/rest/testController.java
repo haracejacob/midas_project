@@ -1,5 +1,6 @@
 package main.rest;
 
+import java.sql.SQLException;
 import java.util.Collection;
 
 import org.apache.struts2.rest.DefaultHttpHeaders;
@@ -7,6 +8,7 @@ import org.apache.struts2.rest.HttpHeaders;
 
 import com.opensymphony.xwork2.ModelDriven;
 
+import main.java.except.BaseException;
 import main.java.vo.testVO;
 import lombok.Data;
 
@@ -17,24 +19,31 @@ public class testController implements ModelDriven<Object>{
     private String id;
     private Collection<testVO> list;
     
-    public HttpHeaders create() {
+    public HttpHeaders create() throws BaseException, SQLException {
         testService.save(model);
         return new DefaultHttpHeaders("create");
     }
 
-    public HttpHeaders destroy() {
+    public HttpHeaders destroy() throws BaseException {
+    	testService.remove(id);
         return new DefaultHttpHeaders("destroy");
     }
 
     public HttpHeaders show() {
+    	model = testService.find(id);
         return new DefaultHttpHeaders("show").disableCaching();
     }
 
-    public HttpHeaders update() {
+    public HttpHeaders update() throws BaseException, SQLException {
+    	testService.update(model);
+    	return new DefaultHttpHeaders("update");
+    }
+    
+/*    public HttpHeaders update() throws BaseException, SQLException {
     	testService.save(model);
         return new DefaultHttpHeaders("update");
     }
-
+*/
     public HttpHeaders index() {
         list = testService.findAll();
         return new DefaultHttpHeaders("index").disableCaching();

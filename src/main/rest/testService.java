@@ -1,10 +1,12 @@
 package main.rest;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import main.java.except.BaseException;
+import main.java.logic.commonLogic;
 import main.java.logic.testLogic;
 import main.java.vo.testVO;
 
@@ -15,16 +17,17 @@ public class testService {
 	
 	static {
 		testList = new ArrayList<testVO>();
+		
 	    try {
 			testList = testLogic.getTestList();
+			nextMessageId = commonLogic.getCurrentAI("usercore");
 		} catch (BaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	    
-	    nextMessageId = testList.size()+1;
-	    for(int i=0; i<nextMessageId-1; i++) 
-	    	messages.put(Integer.toString(i+1), testList.get(i));
+	   
+	    for(int i=0; i<testList.size(); i++)
+	    	messages.put(Integer.toString(testList.get(i).getSeq()), testList.get(i));
 	}
 	
 	public static List<testVO> findAll() {
@@ -35,17 +38,27 @@ public class testService {
 		return messages.get(id);
 	}
 	
+	public static void update(testVO message) throws SQLException, BaseException {
+		//testLogic.updateTest(message);
+		
+		String id = Integer.toString(message.getSeq());
+		remove(id);
+		save(message);
+	}
 	
-	public static void save(testVO message) {
+	public static void save(testVO message) throws BaseException, SQLException {
 	    if (message.getSeq() == 0) {
 	        String id = String.valueOf(nextMessageId);
 	        message.setSeq(Integer.parseInt(id));
 	        nextMessageId++;
 	    }
+	    testLogic.insertTest(message);
 	    messages.put(message.getId(), message);
 	}
 	
-	public static void remove(String id) {
-	    messages.remove(id);
+	public static void remove(String id) throws BaseException {
+		int seq = Integer.parseInt(id);
+		testLogic.deleteTest(seq);
+		messages.remove(id);
 	}
 }

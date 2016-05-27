@@ -18,6 +18,7 @@
 
 	<mappers>
 		<mapper resource="main/resources/data/test.xml" />
+		<mapper resource="main/resources/data/common.xml" />
 	</mappers>
 	
 </configuration>

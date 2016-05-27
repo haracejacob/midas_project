@@ -6,5 +6,31 @@
 	<select id="GetTest" resultType="main.java.vo.testVO"> 
 		SELECT *
 		FROM usercore
+		ORDER BY seq asc
 	</select>
+	
+	<update id="UpdateTest" parameterType="main.java.vo.testVO">
+		UPDATE usercore 
+		SET 
+			id = #{id},
+			gems = #{gems},
+			coins = #{coins},
+			hearts = #{hearts},
+			highscore = #{highscore}
+		WHERE
+			seq = #{seq}
+	</update>
+	
+	<insert id="InsertTest" parameterType="main.java.vo.testVO">
+		INSERT INTO usercore
+			(`id`, `gems`, `coins`, `hearts`, `highscore`)  
+		VALUES
+			(#{id}, #{gems}, #{coins}, #{hearts}, #{highscore})
+	</insert>
+	
+	<delete id="DeleteTest" parameterType="integer">
+		DELETE 
+		FROM usercore
+		WHERE seq = #{seq}
+	</delete>
 </mapper>
