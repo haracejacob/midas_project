@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="category">
+
+	<select id="GetCategoryList" resultType="main.java.vo.categoryVO"> 
+		SELECT *
+		FROM category
+		ORDER BY category_seq ASC
+	</select>
+	
+	<select id="GetMyCategoryList" parameterType="Integer" resultType="main.java.vo.categoryVO"> 
+		SELECT a.category_seq, a.user_seq, b.category_name, b.category_hash
+		FROM category_member AS a 
+		LEFT JOIN category as b 
+		ON a.category_seq = b.category_seq
+		WHERE b.user_seq = #{seq}
+		ORDER BY a.category_seq ASC
+	</select>
+	
+	<update id="UpdateCategory" parameterType="main.java.vo.categoryVO">
+		UPDATE category 
+		SET 
+			category_name = #{category_name}
+		WHERE
+			category_seq = #{category_seq}
+	</update>
+	
+	<insert id="InsertCategory" parameterType="main.java.vo.categoryVO" useGeneratedKeys="true" keyProperty="category_seq">
+		INSERT INTO category
+			(`user_seq`, `category_name`, `category_hash`)  
+		VALUES
+			(#{user_seq}, #{category_name}, md5(CONCAT(#{user_seq},#{category_name},CURRENT_TIMESTAMP())))
+	</insert>
+	
+	<delete id="DeleteCategory" parameterType="Integer">
+		DELETE 
+		FROM category
+		WHERE category_seq = #{seq}
+	</delete>
+	
+	<select id="GetCategorySeq" parameterType="Integer" resultType="Integer">
+		SELECT category_seq
+		FROM category
+		WHERE category_hash = #{code}
+	</select>
+	
+	<insert id="InsertCategoryUser" parameterType="Hashmap">
+		INSERT INTO category_member
+			(`category_seq`, `user_seq`)  
+		VALUES
+			(#{category_seq}, #{user_seq})
+	</insert>
+</mapper>

@@ -6,7 +6,39 @@
 	<select id="GetCurrentAI" parameterType="String" resultType="integer">
 		SELECT `AUTO_INCREMENT`
 		FROM  INFORMATION_SCHEMA.TABLES
-		WHERE TABLE_SCHEMA = 'test'
+		WHERE TABLE_SCHEMA = 'sadang'
 		AND   TABLE_NAME   = #{tablename}
+	</select>
+	
+	<select id="LoginCheck" parameterType="HashMap" resultType="main.java.vo.userVO">
+		SELECT *
+		FROM `user`
+		WHERE `user_email`=#{id} AND `user_passwd` = PASSWORD(#{pw})
+	</select>
+	
+	<select id="IdCheck" parameterType="String" resultType="String">
+		SELECT user_email
+		FROM `user`
+		WHERE `user_email`=#{id}
+	</select>
+	
+	<insert id="SignUser" parameterType="HashMap" useGeneratedKeys="true" keyProperty="user_seq">
+		INSERT INTO user
+			(`user_email`, `user_passwd`)  
+		VALUES
+			(#{id}, password(#{pw}))
+	</insert>
+	
+	<insert id="SignUpUser" parameterType="main.java.vo.userVO" useGeneratedKeys="true" keyProperty="user_seq">
+		INSERT INTO user
+			(`user_name`, `user_email`, `user_passwd`, `user_phone`)  
+		VALUES
+			(#{user_name}, #{user_email}, password(#{user_passwd}), #{user_phone})
+	</insert>
+	
+	<select id="IsMemberCheck" parameterType="HashMap" resultType="Integer">
+		SELECT `user_seq`
+		FROM `category_member`
+		WHERE `category_seq`=#{category_seq} AND `user_seq` = #{user_seq}
 	</select>
 </mapper>

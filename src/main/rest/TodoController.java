@@ -5,42 +5,45 @@ import java.util.Collection;
 
 import org.apache.struts2.rest.DefaultHttpHeaders;
 import org.apache.struts2.rest.HttpHeaders;
+import org.apache.struts2.rest.RestActionSupport;
 
 import com.opensymphony.xwork2.ModelDriven;
 
 import main.java.except.BaseException;
-import main.java.vo.testVO;
+import main.java.vo.todoVO;
 import lombok.Data;
 
+    
 @Data
-public class testController implements ModelDriven<Object>{
+public class TodoController extends RestActionSupport implements ModelDriven<Object>{
+		
 	private static final long serialVersionUID = 89268916175477696L;
-    private testVO model = new testVO();
+    private todoVO model = new todoVO();
     private String id;
-    private Collection<testVO> list;
+    private Collection<todoVO> list;
     
     public HttpHeaders create() throws BaseException, SQLException {
-    	testService.save(model);
+    	TodoService.save(model);
         return new DefaultHttpHeaders("create");
     }
 
     public HttpHeaders destroy() throws BaseException {
-    	testService.remove(id);
+    	TodoService.remove(id);
         return new DefaultHttpHeaders("destroy");
     }
 
     public HttpHeaders show() {
-    	model = testService.find(id);
+    	model = TodoService.find(id);
         return new DefaultHttpHeaders("show").disableCaching();
     }
 
     public HttpHeaders update() throws BaseException, SQLException {
-    	testService.save(model);
+    	TodoService.save(model);
     	return new DefaultHttpHeaders("update");
     }
 
     public HttpHeaders index() {
-        list = testService.findAll();
+        list = TodoService.findAll();
         return new DefaultHttpHeaders("index").disableCaching();
     }
     

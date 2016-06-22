@@ -40,20 +40,24 @@ public class testService {
 	
 	public static void update(testVO message) throws SQLException, BaseException {
 		//testLogic.updateTest(message);
-		
-		String id = Integer.toString(message.getSeq());
-		remove(id);
-		save(message);
+		System.out.println(message);
+		messages.put(message.getTest_id(), message);
 	}
 	
 	public static void save(testVO message) throws BaseException, SQLException {
-	    if (message.getSeq() == 0) {
+	    System.out.println(message);
+		if (message.getSeq() == 0) {
 	        String id = String.valueOf(nextMessageId);
 	        message.setSeq(Integer.parseInt(id));
 	        nextMessageId++;
+	        
+		    testLogic.insertTest(message);
 	    }
-	    testLogic.insertTest(message);
-	    messages.put(message.getId(), message);
+	    else {
+	    	
+	    	//testLogic.setTest(message);
+	    }
+	    messages.put(message.getTest_id(), message);
 	}
 	
 	public static void remove(String id) throws BaseException {

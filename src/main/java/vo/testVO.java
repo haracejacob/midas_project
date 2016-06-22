@@ -6,7 +6,7 @@ import lombok.Data;
 public class testVO {
 
 	private int seq;
-	private String id;
+	private String test_id;
 	private int gems;
 	private int coins;
 	private int hearts;

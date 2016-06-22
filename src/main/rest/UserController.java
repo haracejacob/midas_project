@@ -9,38 +9,39 @@ import org.apache.struts2.rest.HttpHeaders;
 import com.opensymphony.xwork2.ModelDriven;
 
 import main.java.except.BaseException;
-import main.java.vo.testVO;
+import main.java.vo.userVO;
 import lombok.Data;
 
 @Data
-public class testController implements ModelDriven<Object>{
+public class UserController implements ModelDriven<Object>{
+		
 	private static final long serialVersionUID = 89268916175477696L;
-    private testVO model = new testVO();
+    private userVO model = new userVO();
     private String id;
-    private Collection<testVO> list;
+    private Collection<userVO> list;
     
     public HttpHeaders create() throws BaseException, SQLException {
-    	testService.save(model);
-        return new DefaultHttpHeaders("create");
+    	UserService.save(model);
+        return new DefaultHttpHeaders("create").setLocationId(model.getUser_seq());
     }
 
     public HttpHeaders destroy() throws BaseException {
-    	testService.remove(id);
+    	UserService.remove(id);
         return new DefaultHttpHeaders("destroy");
     }
 
     public HttpHeaders show() {
-    	model = testService.find(id);
+    	model = UserService.find(id);
         return new DefaultHttpHeaders("show").disableCaching();
     }
 
     public HttpHeaders update() throws BaseException, SQLException {
-    	testService.save(model);
+    	UserService.save(model);
     	return new DefaultHttpHeaders("update");
     }
 
     public HttpHeaders index() {
-        list = testService.findAll();
+        list = UserService.findAll();
         return new DefaultHttpHeaders("index").disableCaching();
     }
     

@@ -9,7 +9,7 @@
 			<dataSource type="POOLED">
 				<property name="driver" value="com.mysql.jdbc.Driver" />	
 					
-				<property name="url" value="jdbc:mysql://127.0.0.1/test" />
+				<property name="url" value="jdbc:mysql://127.0.0.1/sadang?characterEncoding=utf8" />
 				<property name="username" value="root" />
 				<property name="password" value="apmsetup" />
 			</dataSource>
@@ -18,6 +18,11 @@
 
 	<mappers>
 		<mapper resource="main/resources/data/test.xml" />
+	
+		<mapper resource="main/resources/data/user.xml" />
+		<mapper resource="main/resources/data/todo.xml" />
+		<mapper resource="main/resources/data/board.xml" />
+		<mapper resource="main/resources/data/category.xml" />
 		<mapper resource="main/resources/data/common.xml" />
 	</mappers>
 	

@@ -14,7 +14,7 @@ public class testAction {
 	//testVO
 	private List<testVO> testList = null;
 	private Integer seq =0;
-	private String id = null;
+	private String test_id = null;
 	private Integer gems = 0;
 	private Integer coins = 0;
 	private Integer hearts = 0;
@@ -31,7 +31,7 @@ public class testAction {
 	{
 		testVO testElement = new testVO();
 		
-		testElement.setId(id);
+		testElement.setTest_id(test_id);
 		testElement.setGems(gems);
 		testElement.setCoins(coins);
 		testElement.setHearts(hearts);

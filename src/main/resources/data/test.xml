@@ -12,7 +12,7 @@
 	<update id="UpdateTest" parameterType="main.java.vo.testVO">
 		UPDATE usercore 
 		SET 
-			id = #{id},
+			test_id = #{test_id},
 			gems = #{gems},
 			coins = #{coins},
 			hearts = #{hearts},
@@ -23,9 +23,9 @@
 	
 	<insert id="InsertTest" parameterType="main.java.vo.testVO">
 		INSERT INTO usercore
-			(`id`, `gems`, `coins`, `hearts`, `highscore`)  
+			(`test_id`, `gems`, `coins`, `hearts`, `highscore`)  
 		VALUES
-			(#{id}, #{gems}, #{coins}, #{hearts}, #{highscore})
+			(#{test_id}, #{gems}, #{coins}, #{hearts}, #{highscore})
 	</insert>
 	
 	<delete id="DeleteTest" parameterType="integer">

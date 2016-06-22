@@ -9,17 +9,16 @@ import main.java.except.BaseException;
 
 import org.apache.ibatis.session.SqlSession;
 
-import main.java.vo.testVO;
+import main.java.vo.boardVO;
 
+public class boardLogic {
 
-public class testLogic {
-	
-	public static List<testVO> getTestList() throws BaseException {
+	public static List<boardVO> getBoardList() throws BaseException {
 		SqlSession sqlSession = SqlSessionManager.getSession();
-		List<testVO> result;
+		List<boardVO> result;
 
 		try {
-			result = sqlSession.selectList("test.GetTest");
+			result = sqlSession.selectList("board.GetBoardList");
 		} catch (Exception e) {
 			sqlSession.close();
 			throw new BaseException("DB에러입니다.");
@@ -31,13 +30,14 @@ public class testLogic {
 
 		return result;
 	}
-	public static void setTest(testVO test) throws BaseException, SQLException {
+	
+	public static void setBoard(boardVO board) throws BaseException, SQLException {
 		SqlSession sqlSession = SqlSessionManager.getSession();
 		Connection conn = sqlSession.getConnection();
 		conn.setAutoCommit(false);
 
 		try {
-			sqlSession.update("test.UpdateTest", test);
+			sqlSession.update("board.UpdateBoard", board);
 			conn.commit();
 		} catch (Exception e) {
 			try {
@@ -56,13 +56,13 @@ public class testLogic {
 		}
 		conn.close();
 	}
-	
-	public static void insertTest(testVO testElement) throws BaseException, SQLException {
+
+	public static void insertBoard(boardVO boardElement)throws BaseException, SQLException {
 		SqlSession sqlSession = SqlSessionManager.getSession();
 		Connection conn = sqlSession.getConnection();
 				
 		try {
-			sqlSession.insert("test.InsertTest", testElement);
+			sqlSession.insert("board.InsertBoard", boardElement);
 			conn.commit();	
 		}
 		catch(Exception e) {
@@ -83,12 +83,12 @@ public class testLogic {
 			}
 		}
 	}
-	
-	public static void deleteTest(int seq) throws BaseException {
+
+	public static void deleteBoard(int seq) throws BaseException {
 		SqlSession sqlSession = SqlSessionManager.getSession();	
 		
 		try {
-			sqlSession.delete("test.DeleteTest", seq);
+			sqlSession.delete("board.DeleteBoard", seq);
 			sqlSession.commit();
 		} catch (Exception e) {
 			sqlSession.close();
@@ -96,4 +96,5 @@ public class testLogic {
 		}
 		sqlSession.close();
 	}
+
 }

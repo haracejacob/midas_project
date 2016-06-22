@@ -11,9 +11,9 @@ public class MessageService {
 
 		static {
 			
-			Message message1 = new Message("1", "hello", "john");
-			Message message2 = new Message("2", "world", "ted");
-			Message message3 = new Message("3", "rest", "sam");
+			Message message1 = new Message("one", "hello", "john");
+			Message message2 = new Message("two", "world", "ted");
+			Message message3 = new Message("three", "rest", "sam");
 			messages.put("1", message1);
 			messages.put("2", message2);
 			messages.put("3", message3);
@@ -30,12 +30,12 @@ public class MessageService {
 		}
 		
 		public static void save(Message message) {
-		    if (message.getId() == null) {
+		    if (message.getMsg_id() == null) {
 		        String id = String.valueOf(nextMessageId);
-		        message.setId(id);
+		        message.setMsg_id(id);
 		        nextMessageId++;
 		    }
-		    messages.put(message.getId(), message);
+		    messages.put(message.getMsg_id(), message);
 		}
 		
 		public static void remove(String id) {

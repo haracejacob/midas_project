@@ -1,51 +1,173 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE struts PUBLIC
-		"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
-		"http://struts.apache.org/dtds/struts-2.5.dtd">
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
 
 <struts>
-	<constant name="struts.devMode" value="true" />
-	
-	<constant name="struts.action.extension" value="xhtml,,xml,json,action"/>
-	
-	<constant name="struts.mapper.class" value="org.apache.struts2.dispatcher.mapper.PrefixBasedActionMapper" />
-	<constant name="struts.mapper.prefixMapping" value="/rest:rest,:struts"/>
-	
+    <constant name="struts.devMode" value="true"/>
+
+    <constant name="struts.action.extension" value="xhtml,,xml,json,action"/>
+
+    <constant name="struts.mapper.class" value="org.apache.struts2.dispatcher.mapper.PrefixBasedActionMapper"/>
+    <constant name="struts.mapper.prefixMapping" value="/rest:rest,:struts"/>
+
     <constant name="struts.convention.action.suffix" value="Controller"/>
     <constant name="struts.convention.action.mapAllMatches" value="true"/>
     <constant name="struts.convention.default.parent.package" value="myRestPackage"/>
     <constant name="struts.convention.package.locators" value="rest"/>
-	
-	<package name="myRestPackage" namespace="/rest" extends="rest-default"/>
-    
-	<package name="midasWeb" namespace="/" extends="struts-default, tiles-default">
-		<result-types>
-			<result-type name="tiles" class="org.apache.struts2.views.tiles.TilesResult">
-			</result-type>
-		</result-types>
-		
-		<action name="">
-			<result type="tiles">main</result>
-		</action>
-		<action name="main" class="main.java.action.testAction" method="showTestList">
-			<result type="tiles" name="SUCCESS">test</result>
-		</action>
-		
-		<!-- insertTest는 정적 insertTestAjax는 Ajax에 쓰이며 동적 그런데 /rest/test에 post보내도 insert됨-->
-		<action name="insertTest" class="main.java.action.testAction" method="insertTest">
-			<result type="redirect" name="SUCCESS">
-				<param name="location">main</param>
+
+    <package name="myRestPackage" namespace="/rest" extends="rest-default, json-default">
+    	<result-types>
+            <result-type name="json" class="com.googlecode.jsonplugin.JSONResult">
+            </result-type>
+        </result-types>
+    </package>
+
+    <package name="midasWeb" namespace="/" extends="struts-default, tiles-default">
+        <result-types>
+            <result-type name="tiles" class="org.apache.struts2.views.tiles.TilesResult">
+            </result-type>
+        </result-types>
+        
+        <interceptors>
+			<interceptor name="LoginInterceptor" class="main.java.interceptor.LoginInterceptor" />	<!-- login인지 체크 -->
+			<interceptor-stack name="SignIn">												<!-- <interceptor-ref name="SignIn" /> -->
+				<interceptor-ref name="LoginInterceptor"/>
+				<interceptor-ref name="defaultStack"/>
+			</interceptor-stack>
+			<interceptor name="UserInterceptor" class="main.java.interceptor.UserInterceptor" />	<!-- login인지 체크 -->
+			<interceptor-stack name="IsYou">												<!-- <interceptor-ref name="IsYou" /> -->
+				<interceptor-ref name="UserInterceptor"/>
+				<interceptor-ref name="defaultStack"/>
+			</interceptor-stack>
+			<interceptor name="MemberInterceptor" class="main.java.interceptor.MemberInterceptor" />	<!-- Category Member인지 체크 -->
+			<interceptor-stack name="IsMember">													<!-- <interceptor-ref name="IsMember" /> -->
+				<interceptor-ref name="MemberInterceptor"/>
+				<interceptor-ref name="defaultStack"/>
+			</interceptor-stack>
+		</interceptors>
+
+        <action name="" class="main.java.action.commonAction">
+            <result name="SUCCESS">/WEB-INF/jsp/login.jsp</result>
+            <result type="redirect" name="LOGINED">
+            	<param name="location">todo</param>
+            </result>
+        </action>
+        
+        <action name="signup" class="main.java.action.commonAction">
+            <result name="SUCCESS">/WEB-INF/jsp/registry.jsp</result>
+            <result type="redirect" name="LOGINED">
+            	<param name="location">todo</param>
+            </result>
+        </action>
+        
+        <action name="signupProcess" class="main.java.action.commonAction" method="signup">
+            <result type="redirect" name="LOGINED">
+            	<param name="location">todo</param>
+            </result>
+            <result type="redirect" name="SUCCESS">
+            	<param name="location">#</param>
+            </result>
+        </action>
+        
+        <action name="todo" class="main.java.action.commonAction">
+        	<interceptor-ref name="SignIn" />
+            <result name="LOGINED">/WEB-INF/jsp/todo.jsp</result>
+        </action>
+
+        
+		<action name="loginCheck" class="main.java.action.commonAction" method="login">
+            <result type="redirect" name="LOGINED">
+				<param name="location">todo</param>
 			</result>
-		</action>
-		<action name="insertTestAjax" class="main.java.action.testAction" method="insertTest">
-			<result type="redirect" name="SUCCESS">
-				<param name="location">showTestList</param>
+			<result type="redirect" name="SIGNUP">
+				<param name="err_msg">${err_msg}</param>
+				<param name="user_email">${user_email}</param>
+				<param name="location">signup</param>
 			</result>
-		</action>
-		<action name="deleteTest" class="main.java.action.testAction" method="deleteTest">
-			<result type="redirect" name="SUCCESS">
-				<param name="location">main</param>
+			<result type="redirect" name="FAIL">
+				<param name="err_msg">${err_msg}</param>
+				<param name="location">#</param>
 			</result>
+        </action>
+        <action name="logout" class="main.java.action.commonAction" method="logout">
+            <result type="redirect" name="SUCCESS">
+				<param name="location">#</param>
+			</result>
+        </action>
+        <!-- ajax에 쓰이는 update 문-->
+		<action name="updateTodo" class="main.java.action.todoAction" method="modifyTodo">
+			<interceptor-ref name="SignIn" />
+			<result name="SUCCESS" type="httpheader">
+                <param name="status" >200</param>
+	        </result>
+	        <result name="FAIL" type="httpheader">
+	                <param name="status" >500</param>
+	        </result>
 		</action>
-	</package>
+		<action name="updateUser" class="main.java.action.userAction" method="modifyUser">
+			<interceptor-ref name="SignIn" />
+			<result name="SUCCESS" type="httpheader">
+                <param name="status" >200</param>
+	        </result>
+	        <result name="FAIL" type="httpheader" >
+	                <param name="status" >500</param>
+	        </result>
+		</action>
+		<action name="updateCategory" class="main.java.action.categoryAction" method="modifyCategory">
+			<interceptor-ref name="SignIn" />
+			<result name="SUCCESS" type="httpheader">
+                <param name="status" >200</param>
+	        </result>
+	        <result name="FAIL" type="httpheader">
+	                <param name="status" >500</param>
+	        </result>
+		</action>
+		<action name="modifyComplete" class="main.java.action.todoAction" method="modifyComplete">
+			<interceptor-ref name="SignIn" />
+			<result name="SUCCESS" type="httpheader">
+                <param name="status" >200</param>
+	        </result>
+	        <result name="FAIL" type="httpheader">
+	                <param name="status" >500</param>
+	        </result>
+		</action>
+		<action name="modifyBookmark" class="main.java.action.todoAction" method="modifyBookmark">
+			<interceptor-ref name="SignIn" />
+			<result name="SUCCESS" type="httpheader">
+                <param name="status" >200</param>
+	        </result>
+	        <result name="FAIL" type="httpheader">
+	                <param name="status" >500</param>
+	        </result>
+		</action>
+        <!-- ajax에 쓰이는 update문 끝  -->
+        <action name="joinCategory" class="main.java.action.categoryAction" method="checkCategoryHash">
+			<interceptor-ref name="SignIn" />
+			<result name="SUCCESS" type="httpheader">
+                <param name="status" >200</param>
+	        </result>
+	        <result name="FAIL" type="httpheader">
+	                <param name="status" >500</param>
+	        </result>
+		</action>
+        <!-- <action name="main" class="main.java.action.testAction" method="showTestList">
+            <result type="tiles" name="SUCCESS">test</result>
+        </action>
+        <action name="insertTest" class="main.java.action.testAction" method="insertTest">
+            <result type="redirect" name="SUCCESS">
+                <param name="location">main</param>
+            </result>
+        </action>
+        <action name="insertTestAjax" class="main.java.action.testAction" method="insertTest">
+            <result type="redirect" name="SUCCESS">
+                <param name="location">showTestList</param>
+            </result>
+        </action>
+        <action name="deleteTest" class="main.java.action.testAction" method="deleteTest">
+            <result type="redirect" name="SUCCESS">
+                <param name="location">main</param>
+            </result>
+        </action> -->
+    </package>
 </struts>

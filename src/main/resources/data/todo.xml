@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="todo">
+	<select id="GetTodoList" resultType="main.java.vo.todoVO"> 
+		SELECT *
+		FROM todo
+		ORDER BY todo_seq asc
+	</select>
+	
+	<select id="GetMyTodoList" parameterType="Integer" resultType="main.java.vo.todoVO"> 	
+		SELECT a.*, b.category_name
+		FROM todo AS a 
+		LEFT JOIN category AS b 
+		ON a.category_seq = b.category_seq
+		WHERE a.category_seq 
+		IN (	SELECT category_seq 
+				FROM category_member 
+				WHERE user_seq=#{seq})
+		ORDER BY a.category_seq asc
+	</select>
+	
+	
+	
+	<update id="UpdateTodo" parameterType="main.java.vo.todoVO">
+		UPDATE todo 
+		SET 
+			end_date = #{end_date},
+			contents = #{contents},
+			complete = #{complete},
+			bookmark = #{bookmark}
+		WHERE
+			todo_seq = #{todo_seq}
+	</update>
+	
+	<insert id="InsertTodo" parameterType="main.java.vo.todoVO">
+		INSERT INTO todo
+			(`user_seq`, `category_seq`, `contents`, `start_date`, `end_date`)  
+		VALUES
+			(#{user_seq}, #{category_seq}, #{contents}, #{start_date}, #{end_date})
+	</insert>
+	
+	<delete id="DeleteTodo" parameterType="Integer">
+		DELETE 
+		FROM todo
+		WHERE todo_seq = #{seq}
+	</delete>
+	
+	<update id="UpdateProperty" parameterType="Hashmap">
+		UPDATE todo 
+		SET 
+		<if test="complete != null">
+			complete = #{complete}
+		</if>
+		<if test="bookmark != null">
+			bookmark = #{bookmark}
+		</if>
+		WHERE
+			todo_seq = #{seq}
+	</update>
+	
+</mapper>
